@@ -40,6 +40,27 @@ Route::post('/submit', function (Request $request) {
     return redirect('/');
 });
 
+//MOTOS
+Route::get('/view_motos', function () {
+    return view('view_motos');
+});
+
+Route::get('/submit_moto', function () {
+	$motos = \App\Moto::all();
+    return view('motos/submit', ['motos' => $motos]);
+});
+Route::post('/submit_moto', function (Request $request) {
+    $data = $request->validate([
+        'title' => 'required|max:255',
+        'url' => 'required|url|max:255',
+        'description' => 'required|max:255',
+    ]);
+
+    $moto = tap(new App\Moto($data))->save();
+
+    return redirect('/');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
